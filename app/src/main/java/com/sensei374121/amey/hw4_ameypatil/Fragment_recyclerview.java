@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 /**
  * Created by Amey on 17-02-2016.
@@ -16,7 +17,7 @@ public class Fragment_recyclerview extends Fragment {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mRecyclerAdapter;
+    private MyRecyclerViewAdapter mRecyclerAdapter;
     private MovieData moviedata = new MovieData();
 
     public static Fragment_recyclerview newInstance(){
@@ -47,15 +48,24 @@ public class Fragment_recyclerview extends Fragment {
         mRecyclerAdapter = new MyRecyclerViewAdapter(getActivity(), moviedata.getMoviesList());
         mRecyclerView.setAdapter(mRecyclerAdapter);
 
-
-
         //implement the interface
-        //TODO
+        mRecyclerAdapter.setOnItemClickListener(new MyRecyclerViewAdapter.OnItemClickListener(){
+            @Override
+            public void onItemClick(View view, int position) {
+                //TODO implement onItemClick
+                Toast.makeText(getContext(),"On item clicked",Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onItemLongClick(View view, int position) {
+                //TODO implemetn on ITEM long click
+                moviedata.moviesList.remove(position);
+                mRecyclerAdapter.notifyItemRemoved(position);
+            }
+        });
 
 
 
         return rootview;
-        //TODO
     }
 }

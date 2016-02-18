@@ -5,11 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +21,10 @@ import java.util.Map;
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
     //Declaring Variables
+    MovieData moviedata = new MovieData();
     private Context mContext;
     private List<Map<String,?>> mDataset;
+    private OnItemClickListener mItemClickListener;
 
     public MyRecyclerViewAdapter(Context myContext, List<Map<String,?>> myDataset){
         mContext = myContext;
@@ -41,8 +45,18 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Clicked on the view", Toast.LENGTH_SHORT).show();
-                    //TODO
+                    if (mItemClickListener !=null){
+                        mItemClickListener.onItemClick(v, getPosition());
+                    }
+                }
+            });
+            v.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if(mItemClickListener != null){
+                        mItemClickListener.onItemLongClick(v,getPosition());
+                    }
+                    return true;
                 }
             });
         }
@@ -51,8 +65,17 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-        v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_layout,parent,false);
+        switch (viewType){
+            case 1: v = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.item_layout, parent, false);
+                    break;
+            case 0: v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_layout_other,parent,false);
+                    break;
+            default: v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_layout_other,parent,false);
+        }
+
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -70,5 +93,25 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     @Override
     public int getItemCount() {
         return mDataset.size();
+    }
+
+    public interface OnItemClickListener{
+        public void onItemClick(View view,int position);
+        public void onItemLongClick(View view, int position);
+    }
+
+    public void setOnItemClickListener(final OnItemClickListener mItemClickListener){
+        this.mItemClickListener = mItemClickListener;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        double rating = (double) moviedata.getItem(position).get("rating");
+        if(rating > 8.0){
+            return 1;
+        }
+        else{
+            return 0;
+        }
     }
 }
