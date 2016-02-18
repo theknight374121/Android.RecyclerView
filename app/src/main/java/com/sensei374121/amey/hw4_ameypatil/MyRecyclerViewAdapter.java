@@ -42,6 +42,15 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             vDescription = (TextView) v.findViewById(R.id.item_description);
             vCheckbox = (CheckBox) v.findViewById(R.id.item_checkbox);
 
+            vCheckbox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mItemClickListener != null){
+                        mItemClickListener.onCheckboxClicked(v,getPosition());
+                    }
+                }
+            });
+
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -73,7 +82,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                         .inflate(R.layout.item_layout_other,parent,false);
                     break;
             default: v = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_layout_other,parent,false);
+                        .inflate(R.layout.item_layout_other, parent, false);
         }
 
         ViewHolder vh = new ViewHolder(v);
@@ -98,6 +107,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     public interface OnItemClickListener{
         public void onItemClick(View view,int position);
         public void onItemLongClick(View view, int position);
+        public void onCheckboxClicked(View view, int position);
     }
 
     public void setOnItemClickListener(final OnItemClickListener mItemClickListener){
