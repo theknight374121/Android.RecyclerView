@@ -14,6 +14,12 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
+import jp.wasabeef.recyclerview.animators.FlipInTopXAnimator;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+
 /**
  * Created by Amey on 17-02-2016.
  */
@@ -53,9 +59,16 @@ public class Fragment_recyclerview extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        //Setting up animations for items
+        mRecyclerView.setItemAnimator(new LandingAnimator());
+
         //set Adapter
         mRecyclerAdapter = new MyRecyclerViewAdapter(getActivity(), moviedata.getMoviesList());
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        //set animations for the adapter
+        ScaleInAnimationAdapter scaleAdapter = new ScaleInAnimationAdapter(mRecyclerAdapter);
+        scaleAdapter.setDuration(500);
+
+        mRecyclerView.setAdapter(scaleAdapter);
 
         //implement the interface
         mRecyclerAdapter.setOnItemClickListener(new MyRecyclerViewAdapter.OnItemClickListener() {
@@ -91,7 +104,7 @@ public class Fragment_recyclerview extends Fragment {
                         HashMap item = moviedata.getItem(i);
                         item.put("selection",false);
                     }
-                    mRecyclerAdapter.notifyDataSetChanged();
+                    mRecyclerAdapter.notifyItemRangeChanged(0, mRecyclerAdapter.getItemCount());
                 }
             });
             selectall.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +114,7 @@ public class Fragment_recyclerview extends Fragment {
                         HashMap item = moviedata.getItem(i);
                         item.put("selection",true);
                     }
-                    mRecyclerAdapter.notifyDataSetChanged();
+                    mRecyclerAdapter.notifyItemRangeChanged(0, mRecyclerAdapter.getItemCount());
                 }
             });
             delete.setOnClickListener(new View.OnClickListener() {
@@ -114,10 +127,13 @@ public class Fragment_recyclerview extends Fragment {
                             moviedata.moviesList.remove(i);
                         }
                     }
-                    mRecyclerAdapter.notifyDataSetChanged();
+                    mRecyclerAdapter.notifyItemRangeChanged(0,mRecyclerAdapter.getItemCount());
                 }
             });
         }
+
+
+
 
 
         return rootview;
