@@ -9,5 +9,9 @@ public class Activity_RecyclerView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recyclerview);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.recycler_view_main_container, Fragment_recyclerview.newInstance())
+                .commit();
     }
 }

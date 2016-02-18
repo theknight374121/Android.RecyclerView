@@ -10,12 +10,12 @@ import android.widget.Button;
 /**
  * Created by Amey on 09-02-2016.
  */
-public class fragment_home extends Fragment {
+public class Fragment_home extends Fragment {
 
     private static final String FRAGMENT_ID="fragment_id";
 
-    public static fragment_home newInstance(int fragment_id){
-        fragment_home fragment = new fragment_home();
+    public static Fragment_home newInstance(int fragment_id){
+        Fragment_home fragment = new Fragment_home();
         Bundle args = new Bundle();
 
         //code to add any values
@@ -25,7 +25,7 @@ public class fragment_home extends Fragment {
         return fragment;
     }
 
-    public fragment_home(){
+    public Fragment_home(){
 
     }
 
