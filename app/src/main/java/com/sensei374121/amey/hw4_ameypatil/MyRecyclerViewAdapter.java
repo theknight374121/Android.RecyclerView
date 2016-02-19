@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,12 +36,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         public TextView vTitle,vDescription;
         public ImageView vImage;
         public CheckBox vCheckbox;
+        public RatingBar vRatingBar;
         public ViewHolder(View v){
             super(v);
             vTitle = (TextView) v.findViewById(R.id.item_title);
             vImage = (ImageView) v.findViewById(R.id.item_image);
             vDescription = (TextView) v.findViewById(R.id.item_description);
             vCheckbox = (CheckBox) v.findViewById(R.id.item_checkbox);
+            vRatingBar = (RatingBar) v.findViewById(R.id.myratingbar);
 
             vCheckbox.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -96,6 +99,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         holder.vDescription.setText((CharSequence) movie.get("description"));
         holder.vImage.setImageResource((Integer) movie.get("image"));
         holder.vCheckbox.setChecked((Boolean) movie.get("selection"));
+        double rating = (Double) movie.get("rating")/2.0;
+        holder.vRatingBar.setRating((float) rating);
 
     }
 

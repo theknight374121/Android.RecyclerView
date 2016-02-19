@@ -1,6 +1,7 @@
 package com.sensei374121.amey.hw4_ameypatil;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -30,6 +32,7 @@ public class Fragment_recyclerview extends Fragment {
     private MyRecyclerViewAdapter mRecyclerAdapter;
     private MovieData moviedata = new MovieData();
     private HashMap<String,?> movie_obj;
+    private Parcelable mListState;
 
     public static Fragment_recyclerview newInstance(){
         Fragment_recyclerview frag_obj = new Fragment_recyclerview();
@@ -39,6 +42,12 @@ public class Fragment_recyclerview extends Fragment {
 
         frag_obj.setArguments(args);
         return frag_obj;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Nullable
@@ -74,7 +83,6 @@ public class Fragment_recyclerview extends Fragment {
         mRecyclerAdapter.setOnItemClickListener(new MyRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                //TODO implement onItemClick
                 int_obj.itemClickListener(moviedata.getItem(position));
 
             }
@@ -87,7 +95,15 @@ public class Fragment_recyclerview extends Fragment {
 
             @Override
             public void onCheckboxClicked(View view, int position) {
-                moviedata.getItem(position).put("selection",true);
+                boolean value = (boolean) moviedata.getItem(position).get("selection");
+                if(value){
+                    moviedata.getItem(position).put("selection",false);
+
+                }else{
+                    moviedata.getItem(position).put("selection",true);
+                }
+//                TextView descriptionhidden = (TextView) view.findViewById(R.id.item_description);
+//                descriptionhidden.setVisibility(View.VISIBLE);
             }
         });
 
@@ -125,20 +141,20 @@ public class Fragment_recyclerview extends Fragment {
                         boolean result = (boolean) item.get("selection");
                         if (result==true){
                             moviedata.moviesList.remove(i);
+                            mRecyclerAdapter.notifyItemRemoved(i);
                         }
                     }
-                    mRecyclerAdapter.notifyItemRangeChanged(0,mRecyclerAdapter.getItemCount());
+                    //mRecyclerAdapter.notifyItemRangeChanged(0,mRecyclerAdapter.getItemCount());
                 }
             });
         }
 
 
-
-
-
         return rootview;
+
     }
-    
+
+
     public interface onItemClickListener{
         public void itemClickListener(HashMap<String,?> movie_obj );
     }
